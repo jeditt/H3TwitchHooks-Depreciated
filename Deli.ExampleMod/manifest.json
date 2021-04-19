@@ -1,0 +1,45 @@
+{
+  /* Your mod name and authors */
+  "name": "Deli Example Mod",
+  "authors": [
+    "Nathan Gill",
+    "AshHat"
+  ],
+  
+  /* 
+   * The GUID of your mod and the current version of the mod.
+   * Please do not prefix your GUID with "deli.". This is reserved for mods from the Deli Collective.
+   * Version is in SemVer, so feel free to add some metadata (like git branch/hash).
+   */
+  "guid": "deli.example_mod",
+  "version": "1.0.0",
+  
+  /* 
+   * The SemVer version of Deli that the mod requires
+   * Newer versions are allowed so long as the major components are the same and not 0.
+   * For example, this mod would work with: 0.3.1, 0.3.2, ...
+   * It would not work with: 0.2.0, 0.4.0 (major component is 0), 1.0.0, etc
+   */
+  "require": "0.3.0",
+  /*
+   * Dependencies are a Dict<string,SemVer> of mod GUID, version.
+   * These versions follow the same matching rules as "require".
+   */
+  "dependencies": {},
+  
+  /*
+   * Stage asset tables are stored within this "asset" property for cleanliness.
+   * There is currently: "patcher", "setup", and "runtime" (in that order).
+   */
+  "assets": {
+    /*
+     * Each stage asset table is a Dict<string,string> of paths and loader IDs.
+     * The path can be either a file, folder, or a pattern (which can match files and folders).
+     * Assets are resolved top down, so generally you'll want your assembly first.
+     */
+    "setup": {
+      "Deli.ExampleMod.dll": "deli:assembly",
+      "res/ExampleAsset1.txt": "deli.example_mod:example_asset"
+    }
+  }
+}
