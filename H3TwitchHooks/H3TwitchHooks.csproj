@@ -4,13 +4,8 @@
         <TargetFramework>net35</TargetFramework>
         <LangVersion>9</LangVersion>
         <Nullable>enable</Nullable>
+        <RootNamespace>Deli.ExampleMod</RootNamespace>
     </PropertyGroup>
-
-    <ItemGroup>
-      <None Include="J:\SteamLibrary\steamapps\common\H3VR\Deli\mods\TwitchSloMo\manifest.json" Link="manifest.json">
-        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      </None>
-    </ItemGroup>
     
     <ItemGroup>
       <None Update="res\ExampleTextResource.txt">
