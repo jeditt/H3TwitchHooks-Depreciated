@@ -37,7 +37,7 @@
      * Assets are resolved top down, so generally you'll want your assembly first.
      */
     "setup": {
-      "Deli.ExampleMod.dll": "deli:assembly",
+      "twitchhooks.dll": "deli:assembly",
       "res/ExampleAsset1.txt": "deli.example_mod:example_asset"
     }
   }
