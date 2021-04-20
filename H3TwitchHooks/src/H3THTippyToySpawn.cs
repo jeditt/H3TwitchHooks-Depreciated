@@ -37,10 +37,8 @@ namespace TwitchSloMo
         private void SpawnTippyToy()
         
         {
-            Instantiate(FVRObject.)
-    
-
-        }
+            FVRObject obj = Resources.Load<FVRObject>(ResourceDefs.AnvilAssetResources[prefab]);
+            GameObject go = Instantiate<GameObject>(obj.GetGameObject(), transform.position, transform.rotation, ObjectReferences.CustomScene.transform);
 
         
 
