@@ -5,11 +5,14 @@
         <LangVersion>9</LangVersion>
         <Nullable>enable</Nullable>
     </PropertyGroup>
-    
+
     <ItemGroup>
-      <None Update="manifest.json">
+      <None Include="J:\SteamLibrary\steamapps\common\H3VR\Deli\mods\TwitchSloMo\manifest.json" Link="manifest.json">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
+    </ItemGroup>
+    
+    <ItemGroup>
       <None Update="res\ExampleTextResource.txt">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
@@ -23,6 +26,24 @@
         
       <PackageReference Include="jnm2.ReferenceAssemblies.net35" Version="1.0.1" PrivateAssets="all" />  
       <PackageReference Include="Nullable" Version="1.3.0" PrivateAssets="all" />
+    </ItemGroup>
+    
+    <ItemGroup>
+      <Reference Include="0Harmony">
+        <HintPath>J:\SteamLibrary\steamapps\common\H3VR\BepInEx\core\0Harmony.dll</HintPath>
+      </Reference>
+      <Reference Include="Assembly-CSharp">
+        <HintPath>lib\Assembly-CSharp.dll</HintPath>
+      </Reference>
+      <Reference Include="Assembly-CSharp-firstpass">
+        <HintPath>lib\Assembly-CSharp-firstpass.dll</HintPath>
+      </Reference>
+      <Reference Include="UnityEngine">
+        <HintPath>D:\Unity\Program Files\2020.3.1f1\Editor\Data\Managed\UnityEngine.dll</HintPath>
+      </Reference>
+      <Reference Include="UnityEngine.UI">
+        <HintPath>lib\UnityEngine.UI.dll</HintPath>
+      </Reference>
     </ItemGroup>
 
 </Project>

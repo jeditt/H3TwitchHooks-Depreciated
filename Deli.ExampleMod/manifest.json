@@ -1,9 +1,8 @@
 {
   /* Your mod name and authors */
-  "name": "Deli Example Mod",
+  "name": "TwitchSloMo",
   "authors": [
-    "Nathan Gill",
-    "AshHat"
+    "jeditt"
   ],
   
   /* 
@@ -11,8 +10,8 @@
    * Please do not prefix your GUID with "deli.". This is reserved for mods from the Deli Collective.
    * Version is in SemVer, so feel free to add some metadata (like git branch/hash).
    */
-  "guid": "deli.example_mod",
-  "version": "1.0.0",
+  "guid": "jeditt.twitchslomo",
+  "version": "0.01",
   
   /* 
    * The SemVer version of Deli that the mod requires
