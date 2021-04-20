@@ -1,9 +1,11 @@
 {
+
   "name": "TwitchSloMo",
   "authors": [
     "jeditt"
   ],
   
+
   "guid": "jeditt.twitchslomo",
   "version": "0.0.1",
   
@@ -13,6 +15,7 @@
   "assets": {
     "setup": {
       "twitchhooks.dll": "deli:assembly"
+
     }
   }
 }
