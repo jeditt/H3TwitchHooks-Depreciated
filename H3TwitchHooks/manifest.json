@@ -1,0 +1,21 @@
+{
+
+  "name": "TwitchSloMo",
+  "authors": [
+    "jeditt"
+  ],
+  
+
+  "guid": "jeditt.twitchslomo",
+  "version": "0.0.1",
+  
+  "require": "0.3.0",
+  "dependencies": {},
+  
+  "assets": {
+    "setup": {
+      "twitchhooks.dll": "deli:assembly"
+
+    }
+  }
+}

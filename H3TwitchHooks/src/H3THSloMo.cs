@@ -15,8 +15,9 @@ using FistVR;
 namespace TwitchSloMo
 {
     // DeliBehaviours are just MonoBehaviours that get added to a global game object when the game first starts.
-    public class TwitchSloMo : DeliBehaviour
+    public class H3THSloMo : DeliBehaviour
     {
+
         float slowdownFactor = .001f;
         float slowdownLength = 6f;
 
