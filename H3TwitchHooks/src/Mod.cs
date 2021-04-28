@@ -2,6 +2,7 @@
 using UnityEngine;
 using Valve.VR;
 using System.Collections;
+using FistVR;
 
 namespace H3TwitchHooks 
 {
@@ -9,7 +10,7 @@ namespace H3TwitchHooks
     {
         //Keyword "const" means that it cannot be changed afterwards
         private const float SlowdownFactor = .001f;
-        private const float SlowdownLength = 5f;
+        private const float SlowdownLength = 6f;
 
 
         ///This is a constructor, it is called when a new instance of the object is being made! For example
@@ -21,6 +22,8 @@ namespace H3TwitchHooks
         {
             Logger.LogInfo("Loading H3TwitchHooks");
         }
+
+
 
         private void Awake()
         {
@@ -34,18 +37,29 @@ namespace H3TwitchHooks
               {
                     
              DoSlowmotion();
-      
+                
+                }
             //return time to normal at a gradient
              Time.timeScale += (1f / SlowdownLength) * Time.unscaledDeltaTime; 
              Time.fixedDeltaTime = Time.timeScale / SteamVR.instance.hmd_DisplayFrequency; 
              Time.timeScale = Mathf.Clamp(Time.timeScale, 0f, 1f);
-               }
+              
 
+            //wonderful toy spawn
              if (Input.GetKeyDown(KeyCode.H))
 
             {
-                //this is currently not working, as the return time code above is kicking in every frame, overriding the wait that the coroutine wants to perform
-                StartCoroutine(StopTimeRandomly());
+                SpawnWonderfulToy();
+
+                
+               
+            }
+
+             //body pillow spawn
+              if (Input.GetKeyDown(KeyCode.J))
+
+            {
+                SpawnPillow();
 
                 
                
@@ -75,6 +89,42 @@ namespace H3TwitchHooks
             // Return time to normal 
             Time.timeScale = 1f;
         }
+
+        private void SpawnWonderfulToy()
+        {
+            // Get the object you want to spawn
+            FVRObject obj = IM.OD["TippyToyAnton"];
+          
+
+            // Instantiate (spawn) the object above the player's right hand
+            GameObject go = Instantiate(obj.GetGameObject(), new Vector3(0f, .25f, 0f) + GM.CurrentPlayerBody.Head.position, GM.CurrentPlayerBody.Head.rotation);
+
+            //add some speeeeen
+            go.GetComponent<Rigidbody>().AddTorque (new Vector3(.25f, .25f, .25f));
+           
+
+            //add force
+            go.GetComponent<Rigidbody>().AddForce (GM.CurrentPlayerBody.Head.forward * 25);
+        }
+
+        private void SpawnPillow()
+        {
+            // Get the object you want to spawn
+            FVRObject obj = IM.OD["BodyPillow"];
+          
+
+            // Instantiate (spawn) the object above the player head
+            GameObject go = Instantiate(obj.GetGameObject(), new Vector3(0f, .25f, 0f) + GM.CurrentPlayerBody.Head.position, GM.CurrentPlayerBody.Head.rotation);
+
+            //add some speeeeen
+            go.GetComponent<Rigidbody>().AddTorque (new Vector3(.25f, .25f, .25f));
+           
+
+            //add force
+            go.GetComponent<Rigidbody>().AddForce (GM.CurrentPlayerBody.Head.forward * 250);
+        }
+
+       
 
    
     }
