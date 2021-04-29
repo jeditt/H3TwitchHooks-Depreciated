@@ -64,6 +64,12 @@ namespace H3TwitchHooks
                 
                
             }
+
+              //flash spawn
+              if (Input.GetKeyDown(KeyCode.K))
+            {
+                SpawnFlash();
+            }
         }
 
 
@@ -115,15 +121,37 @@ namespace H3TwitchHooks
 
             // Instantiate (spawn) the object above the player head
             GameObject go = Instantiate(obj.GetGameObject(), new Vector3(0f, .25f, 0f) + GM.CurrentPlayerBody.Head.position, GM.CurrentPlayerBody.Head.rotation);
-
-            //add some speeeeen
-            go.GetComponent<Rigidbody>().AddTorque (new Vector3(.25f, .25f, .25f));
            
 
             //add force
-            go.GetComponent<Rigidbody>().AddForce (GM.CurrentPlayerBody.Head.forward * 250);
+            go.GetComponent<Rigidbody>().AddForce (GM.CurrentPlayerBody.Head.forward * 10000);
         }
+        
+        //we want to spawn a flashbang infront of the player with little notice
+        private void SpawnFlash()
+        {
+            // Get the object you want to spawn
+            FVRObject obj = IM.OD["PinnedGrenadeXM84"];
 
+
+            // Instantiate (spawn) the object above the player head
+            Logger.LogInfo("Spawned Object");
+            GameObject go = Instantiate(obj.GetGameObject(), new Vector3(0f, .25f, 0f) + GM.CurrentPlayerBody.Head.position, GM.CurrentPlayerBody.Head.rotation);
+            
+
+            //prime the flash object
+            Logger.LogInfo("Getting Component");
+            PinnedGrenade grenade = go.GetComponentInChildren<PinnedGrenade>();
+            Logger.LogInfo("Releasing Lever");
+            grenade.ReleaseLever();
+            
+           
+
+            //add force
+            Logger.LogInfo("Adding Force");
+            go.GetComponent<Rigidbody>().AddForce (GM.CurrentPlayerBody.Head.forward * 500);
+        }
+        
        
 
    
