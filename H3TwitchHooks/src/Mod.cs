@@ -8,6 +8,8 @@ namespace H3TwitchHooks
 {
     public class H3TwitchHooks : DeliBehaviour
     {
+        private ObjectSpawner _spawner;
+        
         public H3TwitchHooks()
         {
             Logger.LogInfo("Loading H3TwitchHooks");
@@ -23,7 +25,9 @@ namespace H3TwitchHooks
 
         private void Update()
         { 
-            if (Input.GetKeyDown(KeyCode.Space)) 
+            
+            
+            if (Input.GetKeyDown(KeyCode.Space))
             {
                 SlowMotion.Execute();
             }
@@ -31,19 +35,40 @@ namespace H3TwitchHooks
             //wonderful toy spawn
             if (Input.GetKeyDown(KeyCode.H))
             {
-                SpawnWonderfulToy();
+                _spawner = new ObjectSpawner("TippyToyAnton");
+                _spawner.Spawn
+                    (
+                        new Vector3(0f, .25f, 0f) + GM.CurrentPlayerBody.Head.position, 
+                        GM.CurrentPlayerBody.Head.rotation, 
+                        new Vector3(.25f, .25f, .25f), 
+                        GM.CurrentPlayerBody.Head.forward * 25
+                    );
             }
 
             //body pillow spawn
             if (Input.GetKeyDown(KeyCode.J))
             {
-                SpawnPillow();
+                _spawner = new ObjectSpawner("BodyPillow");
+                _spawner.Spawn
+                (
+                    new Vector3(0f, .25f, 0f) + GM.CurrentPlayerBody.Head.position, 
+                    GM.CurrentPlayerBody.Head.rotation,
+                    Vector3.zero, 
+                    GM.CurrentPlayerBody.Head.forward * 10000
+                );
             }
 
             //flash spawn
             if (Input.GetKeyDown(KeyCode.K))
             {
-                SpawnFlash();
+                _spawner = new ObjectSpawner("PinnedGrenadeXM84", true);
+                _spawner.Spawn
+                (
+                    new Vector3(0f, .25f, 0f) + GM.CurrentPlayerBody.Head.position, 
+                    GM.CurrentPlayerBody.Head.rotation,
+                    Vector3.zero, 
+                    GM.CurrentPlayerBody.Head.forward * 500
+                );
             }
         }
 
@@ -65,6 +90,7 @@ namespace H3TwitchHooks
 
         private void SpawnWonderfulToy()
         {
+
             // Get the object you want to spawn
             FVRObject obj = IM.OD["TippyToyAnton"];
           
