@@ -8,9 +8,6 @@ namespace H3TwitchHooks
 {
     public class H3TwitchHooks : DeliBehaviour
     {
-        private const float SlowdownFactor = .001f;
-        private const float SlowdownLength = 6f;
-        
         public H3TwitchHooks()
         {
             Logger.LogInfo("Loading H3TwitchHooks");
@@ -28,14 +25,8 @@ namespace H3TwitchHooks
         { 
             if (Input.GetKeyDown(KeyCode.Space)) 
             {
-                DoSlowmotion();
+                SlowMotion.Execute();
             }
-            
-            //return time to normal at a gradient
-            Time.timeScale += (1f / SlowdownLength) * Time.unscaledDeltaTime; 
-            Time.fixedDeltaTime = Time.timeScale / SteamVR.instance.hmd_DisplayFrequency; 
-            Time.timeScale = Mathf.Clamp(Time.timeScale, 0f, 1f);
-              
 
             //wonderful toy spawn
             if (Input.GetKeyDown(KeyCode.H))
@@ -56,15 +47,7 @@ namespace H3TwitchHooks
             }
         }
 
-
         
-
-        private void DoSlowmotion()
-        {
-            Time.timeScale = SlowdownFactor;
-            Time.fixedDeltaTime = Time.timeScale / SteamVR.instance.hmd_DisplayFrequency;
-            
-        }
 
         IEnumerator StopTimeRandomly()
         {
