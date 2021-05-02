@@ -72,7 +72,7 @@ namespace H3TwitchHooks
             }
         }
 
-        
+        #region Old code
 
         IEnumerator StopTimeRandomly()
         {
@@ -88,6 +88,8 @@ namespace H3TwitchHooks
             Time.timeScale = 1f;
         }
 
+
+        
         private void SpawnWonderfulToy()
         {
 
@@ -129,24 +131,24 @@ namespace H3TwitchHooks
 
             // Instantiate (spawn) the object above the player head
             Logger.LogInfo("Spawned Object");
-            GameObject go = Instantiate(obj.GetGameObject(), new Vector3(0f, .25f, 0f) + GM.CurrentPlayerBody.Head.position, GM.CurrentPlayerBody.Head.rotation);
-            
+            GameObject go = Instantiate(obj.GetGameObject(),
+                new Vector3(0f, .25f, 0f) + GM.CurrentPlayerBody.Head.position, GM.CurrentPlayerBody.Head.rotation);
+
 
             //prime the flash object
             Logger.LogInfo("Getting Component");
             PinnedGrenade grenade = go.GetComponentInChildren<PinnedGrenade>();
             Logger.LogInfo("Releasing Lever");
             grenade.ReleaseLever();
-            
-           
+
+
 
             //add force
             Logger.LogInfo("Adding Force");
-            go.GetComponent<Rigidbody>().AddForce (GM.CurrentPlayerBody.Head.forward * 500);
+            go.GetComponent<Rigidbody>().AddForce(GM.CurrentPlayerBody.Head.forward * 500);
         }
         
-       
-
+        #endregion
    
     }
 }
