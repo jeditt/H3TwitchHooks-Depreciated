@@ -33,16 +33,19 @@ namespace H3TwitchHooks
 
         private void Update()
         {
+            if (Time.timeScale != 1)
+            {
+                //return time to normal at a gradient
+                Time.timeScale += (1f / SlowdownLength) * Time.unscaledDeltaTime;
+                Time.fixedDeltaTime = Time.timeScale / SteamVR.instance.hmd_DisplayFrequency;
+                Time.timeScale = Mathf.Clamp(Time.timeScale, 0f, 1f);
+            }
+
             if (Input.GetKeyDown(KeyCode.Space)) //Use keycode here, less things can go wrong
             {
-
                 DoSlowmotion();
-
             }
-            //return time to normal at a gradient
-            Time.timeScale += (1f / SlowdownLength) * Time.unscaledDeltaTime;
-            Time.fixedDeltaTime = Time.timeScale / SteamVR.instance.hmd_DisplayFrequency;
-            Time.timeScale = Mathf.Clamp(Time.timeScale, 0f, 1f);
+
 
 
             //wonderful toy spawn
@@ -50,7 +53,6 @@ namespace H3TwitchHooks
 
             {
                 SpawnWonderfulToy();
-
             }
 
             //body pillow spawn
@@ -58,9 +60,6 @@ namespace H3TwitchHooks
 
             {
                 SpawnPillow();
-
-
-
             }
 
             //flash spawn
@@ -78,13 +77,19 @@ namespace H3TwitchHooks
             //nade spawn
             if (Input.GetKeyDown(KeyCode.V))
             {
-                SpawnNade();
+                SpawnNadeRain();
             }
 
             //hydration spawn
             if (Input.GetKeyDown(KeyCode.I))
             {
                 SpawnHydration();
+            }
+
+            //jedit tt spawn
+            if (Input.GetKeyDown(KeyCode.U))
+            {
+                SpawnJeditToy();
             }
 
         }
@@ -103,6 +108,23 @@ namespace H3TwitchHooks
         {
             // Get the object you want to spawn
             FVRObject obj = IM.OD["TippyToyAnton"];
+
+
+            // Instantiate (spawn) the object above the player's right hand
+            GameObject go = Instantiate(obj.GetGameObject(), new Vector3(0f, .25f, 0f) + GM.CurrentPlayerBody.Head.position, GM.CurrentPlayerBody.Head.rotation);
+
+            //add some speeeeen
+            go.GetComponent<Rigidbody>().AddTorque(new Vector3(.25f, .25f, .25f));
+
+
+            //add force
+            go.GetComponent<Rigidbody>().AddForce(GM.CurrentPlayerBody.Head.forward * 25);
+        }
+
+        private void SpawnJeditToy()
+        {
+            // Get the object you want to spawn
+            FVRObject obj = IM.OD["JediTippyToy"];
 
 
             // Instantiate (spawn) the object above the player's right hand
@@ -155,6 +177,52 @@ namespace H3TwitchHooks
             go.GetComponent<Rigidbody>().AddForce(GM.CurrentPlayerBody.Head.forward * 500);
         }
 
+        private void SpawnNadeRain()
+        {
+            //    //Set cartridge speed
+            float howFast = 15.0f;
+
+            //    //Set max angle
+            float maxAngle = 4.0f;
+
+            Transform PointingTransfrom = transform;
+
+            //    //Get Random direction for bullet
+            Vector2 randRot = Random.insideUnitCircle;
+
+            // Random number for pull chance
+            int pullChance = Random.Range(1, 11);
+            Logger.LogInfo(pullChance);
+
+            // Get the object you want to spawn
+            FVRObject obj = IM.OD["PinnedGrenadeM67"];
+
+            //Set Object Position
+            Vector3 grenadePosition0 = GM.CurrentPlayerBody.Head.position + (GM.CurrentPlayerBody.Head.up * 0.02f);
+
+            // Instantiate (spawn) the object above the player head
+            Logger.LogInfo("Spawned Object");
+            GameObject go = Instantiate(obj.GetGameObject(), grenadePosition0, Quaternion.LookRotation(GM.CurrentPlayerBody.Head.up));
+
+            //Set Object Direction
+            go.transform.Rotate(new Vector3(randRot.x * maxAngle, randRot.y * maxAngle, 0.0f), Space.Self);
+
+            //add force
+            Logger.LogInfo("Adding Force");
+            go.GetComponent<Rigidbody>().velocity = go.transform.forward * howFast;
+
+
+            if (pullChance == 10)
+            {
+                //prime the grenade object
+                Logger.LogInfo("Getting Component");
+                PinnedGrenade grenade = go.GetComponentInChildren<PinnedGrenade>();
+                Logger.LogInfo("Releasing Lever");
+                grenade.ReleaseLever();
+            }
+
+        }
+
         private void SpawnShuri()
 
             {
@@ -202,29 +270,10 @@ namespace H3TwitchHooks
 
             }
 
-            private void SpawnNade()
-        {
-            // Get the object you want to spawn
-            FVRObject obj = IM.OD["PinnedGrenadeM67"];
+        //private void SpawnNade()
+        //{
 
-
-            // Instantiate (spawn) the object above the player head
-            Logger.LogInfo("Spawned Object");
-            GameObject go = Instantiate(obj.GetGameObject(), new Vector3(0f, .25f, 0f) + GM.CurrentPlayerBody.Head.position, GM.CurrentPlayerBody.Head.rotation);
-
-
-            //prime the nade object
-            Logger.LogInfo("Getting Component");
-            PinnedGrenade grenade = go.GetComponentInChildren<PinnedGrenade>();
-            Logger.LogInfo("Releasing Lever");
-            grenade.ReleaseLever();
-
-
-
-            //add force
-            Logger.LogInfo("Adding Force");
-            go.GetComponent<Rigidbody>().AddForce(GM.CurrentPlayerBody.Head.forward * 500);
-        }
+        //}
 
         private void SpawnHydration()
         {
@@ -267,7 +316,7 @@ namespace H3TwitchHooks
         //    Vector3 bulletPosition1 = GM.CurrentPlayerBody.LeftHand.position + (GM.CurrentPlayerBody.LeftHand.forward * 0.02f + GM.CurrentPlayerBody.LeftHand.up * 0.01f);
 
         //    //Create Bullet
-        //    //GameObject go0 = Instantiate(obj.GetGameObject(), bulletPosition0, Quaternion.LookRotation(-GM.CurrentPlayerBody.LeftHand.upxx));
+        //    //GameObject go0 = Instantiate(obj.GetGameObject(), bulletPosition0, Quaternion.LookRotation(-GM.CurrentPlayerBody.LeftHand.up));
         //    //GameObject go1 = Instantiate(obj.GetGameObject(), bulletPosition0, Quaternion.LookRotation(-GM.CurrentPlayerBody.LeftHand.up));
 
         //    //old spray
