@@ -12,6 +12,9 @@ namespace H3TwitchHooks
         //Keyword "const" means that it cannot be changed afterwards
         private const float SlowdownFactor = .001f;
         private const float SlowdownLength = 6f;
+        public string SlomoStatus = "Off";
+        private const float MaxSlomo = .1f;
+        private const float SlomoWaitTime = 2f;
 
         ///This is a constructor, it is called when a new instance of the object is being made! For example
         /// <code>
@@ -23,8 +26,6 @@ namespace H3TwitchHooks
             Logger.LogInfo("Loading H3TwitchHooks");
         }
 
-
-
         private void Awake()
         {
             Logger.LogInfo("Successfully loaded H3TwitchHooks!");
@@ -33,18 +34,20 @@ namespace H3TwitchHooks
 
         private void Update()
         {
-            if (Time.timeScale != 1)
-            {
-                //return time to normal at a gradient
-                Time.timeScale += (1f / SlowdownLength) * Time.unscaledDeltaTime;
-                Time.fixedDeltaTime = Time.timeScale / SteamVR.instance.hmd_DisplayFrequency;
-                Time.timeScale = Mathf.Clamp(Time.timeScale, 0f, 1f);
-            }
+            //This was the old way that time returned via twitch hook
+            //if (Time.timeScale != 1)
+            //{
+            //    //return time to normal at a gradient
+            //    Time.timeScale += (1f / SlowdownLength) * Time.unscaledDeltaTime;
+            //    Time.fixedDeltaTime = Time.timeScale / SteamVR.instance.hmd_DisplayFrequency;
+            //    Time.timeScale = Mathf.Clamp(Time.timeScale, 0f, 1f);
+            //}
 
-            if (Input.GetKeyDown(KeyCode.Space)) //Use keycode here, less things can go wrong
-            {
-                DoSlowmotion();
-            }
+            //This was the old way that I was expecting a keypress from Instructbot. Combined with on-demand slomo now.
+            //if (Input.GetKeyDown(KeyCode.Space)) //Use keycode here, less things can go wrong
+            //{
+            //    DoSlowmotion();
+            //}
 
 
 
@@ -92,17 +95,47 @@ namespace H3TwitchHooks
                 SpawnJeditToy();
             }
 
+            if (GM.CurrentMovementManager.Hands[1].Input.AXButtonDown || Input.GetKeyDown(KeyCode.Space))
+            {
+                //Logger.LogInfo("Detected Right A Press!");
+                SlomoStatus = "Slowing";
+            }
+
+            if (SlomoStatus == "Slowing")
+            {
+                //Logger.LogInfo("Slowing!");
+                SlomoScaleDown();
+            }
+
+            if (SlomoStatus == "Wait")
+            {
+                //Logger.LogInfo("Waiting!");
+                SlomoStatus = "Paused";
+                StartCoroutine(SlomoWait());
+            }
+
+            if (SlomoStatus == "Return")
+            {
+                //Logger.LogInfo("Returning!");
+                SlomoReturn();
+            }
+
+            if (Time.timeScale == 1)
+            {
+                SlomoStatus = ("Off");
+            }
+
         }
 
 
 
+        //This was the old version of the slomotion method itself
+        //private void DoSlowmotion()
+        //{
+        //    Time.timeScale = SlowdownFactor;
+        //    Time.fixedDeltaTime = Time.timeScale / SteamVR.instance.hmd_DisplayFrequency;
 
-        private void DoSlowmotion()
-        {
-            Time.timeScale = SlowdownFactor;
-            Time.fixedDeltaTime = Time.timeScale / SteamVR.instance.hmd_DisplayFrequency;
-
-        }
+        //}
 
         private void SpawnWonderfulToy()
         {
@@ -269,6 +302,37 @@ namespace H3TwitchHooks
 
 
             }
+
+        private void SlomoScaleDown()
+        {
+            if (Time.timeScale > MaxSlomo)
+            {
+                Time.timeScale -= (1f) * Time.unscaledDeltaTime;
+                Time.fixedDeltaTime = Time.timeScale / SteamVR.instance.hmd_DisplayFrequency;
+                Time.timeScale = Mathf.Clamp(Time.timeScale, 0f, 1f);
+            }
+
+            if (Time.timeScale <= MaxSlomo)
+            {
+                SlomoStatus = ("Wait");
+            }
+        }
+
+        private void SlomoReturn()
+        {
+            if (Time.timeScale != 1)
+            {
+                Time.timeScale += (1f / 3f) * Time.unscaledDeltaTime;
+                Time.fixedDeltaTime = Time.timeScale / SteamVR.instance.hmd_DisplayFrequency;
+                Time.timeScale = Mathf.Clamp(Time.timeScale, 0f, 1f);
+            }
+        }
+
+        IEnumerator SlomoWait()
+        {
+            yield return new WaitForSecondsRealtime(SlomoWaitTime);
+            SlomoStatus = "Return";
+        }
 
         //private void SpawnNade()
         //{
