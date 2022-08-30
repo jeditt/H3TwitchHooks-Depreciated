@@ -15,6 +15,7 @@ namespace H3TwitchHooks
         public string SlomoStatus = "Off";
         private const float MaxSlomo = .1f;
         private const float SlomoWaitTime = 2f;
+        private List<GameObject> _currentEquipment = new List<GameObject>();
 
         ///This is a constructor, it is called when a new instance of the object is being made! For example
         /// <code>
@@ -123,6 +124,11 @@ namespace H3TwitchHooks
             if (Time.timeScale == 1)
             {
                 SlomoStatus = ("Off");
+            }
+
+            if (Input.GetKeyDown(KeyCode.M))
+            {
+                DestroyHeld();
             }
 
         }
@@ -356,86 +362,17 @@ namespace H3TwitchHooks
             go.GetComponent<Rigidbody>().AddForce(GM.CurrentPlayerBody.Head.forward * 25);
         }
 
+        private void DestroyHeld()
 
-        //private void BulletHose()
-        //{
-        //    //Set cartridge speed
-        //    float howFast = 5.0f;
+        {
+            if (GM.CurrentMovementManager.Hands[1].CurrentInteractable != null && GM.CurrentMovementManager.Hands[1].CurrentInteractable is FVRPhysicalObject)
+            {
+                Destroy(GM.CurrentMovementManager.Hands[1].CurrentInteractable.gameObject);
+            }
+        }
 
-        //    //Set max angle
-        //    float maxAngle = 4.0f;
-
-        //    Transform PointingTransfrom = transform;
-
-
-
-        //    //Get Random direction for bullet
-        //    Vector2 randRot = Random.insideUnitCircle;
-
-        //    // Get the object I want to spawn
-        //    FVRObject obj = IM.OD["762x39mmCartridgeFMJ"];
-
-        //    //Set Object Position
-        //    Vector3 bulletPosition0 = GM.CurrentPlayerBody.LeftHand.position + (GM.CurrentPlayerBody.LeftHand.forward * 0.02f);
-        //    Vector3 bulletPosition1 = GM.CurrentPlayerBody.LeftHand.position + (GM.CurrentPlayerBody.LeftHand.forward * 0.02f + GM.CurrentPlayerBody.LeftHand.up * 0.01f);
-
-        //    //Create Bullet
-        //    //GameObject go0 = Instantiate(obj.GetGameObject(), bulletPosition0, Quaternion.LookRotation(-GM.CurrentPlayerBody.LeftHand.up));
-        //    //GameObject go1 = Instantiate(obj.GetGameObject(), bulletPosition0, Quaternion.LookRotation(-GM.CurrentPlayerBody.LeftHand.up));
-
-        //    //old spray
-        //    GameObject go0 = Instantiate(obj.GetGameObject(), bulletPosition0, Quaternion.LookRotation(GM.CurrentPlayerBody.LeftHand.forward));
-        //    GameObject go1 = Instantiate(obj.GetGameObject(), bulletPosition0, Quaternion.LookRotation(GM.CurrentPlayerBody.LeftHand.forward));
-
-        //    //Set Object Direction
-        //    go0.transform.Rotate(new Vector3(randRot.x * maxAngle, randRot.y * maxAngle, 0.0f), Space.Self);
-        //    go1.transform.Rotate(new Vector3(randRot.x * maxAngle, randRot.y * maxAngle, 0.0f), Space.Self);
-
-        //    //Add Force
-
-
-        //    //go0.GetComponent<Rigidbody>().velocity = GM.CurrentPlayerBody.LeftHand.forward * howFast;
-        //    //go1.GetComponent<Rigidbody>().velocity = GM.CurrentPlayerBody.LeftHand.forward * howFast;
-
-        //    //old spray
-        //    go0.GetComponent<Rigidbody>().velocity = go1.transform.forward * howFast;
-        //    go1.GetComponent<Rigidbody>().velocity = go1.transform.forward * howFast;
-
-
-        //}
-
-        //private void SkittySpawn()
-        //{
-        //    //Set Gun Spawn Speed
-        //    float howFast = 5.0f;
-
-        //    //List of possible Weapons
-        //    List<string> skittySubGuns = new();
-
-        //    string StenMk2 = "StenMk2";
-        //    string ThompsonM1A1 = "ThompsonM1A1";
-        //    string PPSh41 = "PPSh41";
-        //    string MP40 = "MP40";
-        //    string MP18 = "MP18";
-        //    string KP31 = "KP31";
-
-
-        //    skittySubGuns.Add(StenMk2);
-        //    skittySubGuns.Add(ThompsonM1A1);
-        //    skittySubGuns.Add(PPSh41);
-        //    skittySubGuns.Add(MP40);
-        //    skittySubGuns.Add(MP18);
-        //    skittySubGuns.Add(KP31);
-
-        //    //Get Random Number
-        //    int v = Random.Range(0, 6);
-        //    int randomNumber = v;
-
-
-
-
-
-        //}
     }
+
+
 
 }
