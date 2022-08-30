@@ -4,6 +4,7 @@ using Valve.VR;
 using System.Collections;
 using FistVR;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace H3TwitchHooks
 {
@@ -15,7 +16,9 @@ namespace H3TwitchHooks
         public string SlomoStatus = "Off";
         private const float MaxSlomo = .1f;
         private const float SlomoWaitTime = 2f;
-        private List<GameObject> _currentEquipment = new List<GameObject>();
+        private List<string> SkittySubGuns = new List<string>();
+        private string Magazine = "None";
+
 
         ///This is a constructor, it is called when a new instance of the object is being made! For example
         /// <code>
@@ -30,6 +33,12 @@ namespace H3TwitchHooks
         private void Awake()
         {
             Logger.LogInfo("Successfully loaded H3TwitchHooks!");
+
+            SkittySubGuns.Add("M3Greasegun");
+            SkittySubGuns.Add("KP31");
+            SkittySubGuns.Add("MP40");
+            SkittySubGuns.Add("StenMk5");
+            SkittySubGuns.Add("PPSh41");
         }
 
 
@@ -129,6 +138,11 @@ namespace H3TwitchHooks
             if (Input.GetKeyDown(KeyCode.M))
             {
                 DestroyHeld();
+            }
+
+            if (Input.GetKeyDown(KeyCode.N))
+            {
+                SpawnSkittySubGun();
             }
 
         }
@@ -369,6 +383,51 @@ namespace H3TwitchHooks
             {
                 Destroy(GM.CurrentMovementManager.Hands[1].CurrentInteractable.gameObject);
             }
+        }
+
+        private void SpawnSkittySubGun()
+        {
+            SkittySubGuns.Shuffle();
+            string TopGun = SkittySubGuns.ElementAt(0);
+
+            //check to see what gun was picked and find the magazine for it
+            if (TopGun == "PPSh41")
+                {
+                    Magazine = "MagazinePPSH41";
+                }
+            else if (TopGun == "KP31")
+                {
+                    Magazine = "MagazineKP31";
+                }
+            else if (TopGun == "M3Greasegun")
+                {
+                    Magazine = "MagazineM3Greasegun";
+                }
+            else if (TopGun == "MP40")
+                {
+                    Magazine = "MagazineMP40";
+                }
+            else if (TopGun == "StenMk5")
+                {
+                    Magazine = "MagazineStenMk5";
+                }
+
+            // Get the object you want to spawn
+            FVRObject obj = IM.OD[TopGun];
+            FVRObject obj2 = IM.OD[Magazine];
+
+            // Instantiate (spawn) the object above the player's head
+            GameObject go = Instantiate(obj.GetGameObject(), new Vector3(0f, .25f, 0f) + GM.CurrentPlayerBody.Head.position, GM.CurrentPlayerBody.Head.rotation);
+            GameObject go2 = Instantiate(obj2.GetGameObject(), new Vector3(0f, .25f, 0f) + GM.CurrentPlayerBody.Head.position, GM.CurrentPlayerBody.Head.rotation);
+
+            //add some speeeeen
+            go.GetComponent<Rigidbody>().AddTorque(new Vector3(.25f, .25f, .25f));
+            go2.GetComponent<Rigidbody>().AddTorque(new Vector3(.25f, .25f, .25f));
+
+            //add force
+            go.GetComponent<Rigidbody>().AddForce(GM.CurrentPlayerBody.Head.forward * 100);
+            go2.GetComponent<Rigidbody>().AddForce(GM.CurrentPlayerBody.Head.forward * 100);
+
         }
 
     }
